@@ -1,5 +1,7 @@
 from .base import *
 
+DEBUG = True
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -20,7 +22,7 @@ DATABASES = {
 }
 
 
-DEFAULT_LOGGING = {
+LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
@@ -32,7 +34,7 @@ DEFAULT_LOGGING = {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'sql',
+            'formatter': 'sql'
         },
     },
     'loggers': {
