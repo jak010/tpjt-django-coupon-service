@@ -10,8 +10,8 @@ def test_coupon_policy_model():
     """ 쿠폰 정책 생성 테스트 """
 
     coupon_policy = CouponPolicy.init_entity(
-        name="test",
-        description="test",
+        name="[테스트]쿠폰 정책 생성",
+        description="[테스트]쿠폰 정책 생성",
         discount_type=CouponPolicy.DiscountType.FIXED_AMOUNT,
         discount_value=1000,
         minimum_order_amount=10000,
@@ -21,8 +21,6 @@ def test_coupon_policy_model():
         end_time=datetime.datetime.now()
     )
     coupon_policy.save()
-
-
 
     assert coupon_policy.name == "test"
     assert coupon_policy.discount_value == 1000
