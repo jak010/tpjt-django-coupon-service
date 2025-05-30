@@ -1,0 +1,20 @@
+
+version: "3"
+
+services:
+  poomasi_dev_db:
+    image: mysql:8.0.40-debian
+    platform: linux/amd64
+    ports:
+      - "13306:3306"
+    expose:
+      - "13306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: coupon_event
+    volumes:
+      - "./sqls/:/docker-entrypoint-initdb.d/"
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8
+      - --collation-server=utf8_unicode_ci
