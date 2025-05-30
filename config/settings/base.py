@@ -37,6 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+LOCAL_APP = [
+    "coupon"
+]
+
+INSTALLED_APPS = INSTALLED_APPS + LOCAL_APP
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
