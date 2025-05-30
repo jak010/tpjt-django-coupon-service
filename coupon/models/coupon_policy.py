@@ -31,3 +31,12 @@ class CouponPolicy(TimeField):
 
     start_time = models.DateTimeField(null=False)
     end_time = models.DateTimeField(null=False)
+
+    @classmethod
+    def init_entity(cls, name: str, description: str, discount_type: DiscountType, discount_value: int):
+        return cls(
+            name=name,
+            description=description,
+            discount_type=discount_type.value,
+            discount_value=discount_value
+        )
