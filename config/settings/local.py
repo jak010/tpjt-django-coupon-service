@@ -48,4 +48,5 @@ SPECTACULAR_SETTINGS = {
     'TITLE': '',  # OpenAPI 3.0 페이지 타이틀,
     'DESCRIPTION': '',  # OpenAPI 3.0 페이지 설명,
     'VERSION': '1.0.0',  # 버전 정보
+    'SERVE_INCLUDE_SCHEMA': False,
 }

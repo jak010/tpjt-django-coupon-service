@@ -24,14 +24,9 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
-    from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularSwaggerSplitView
-
-
-    class HiddenSpectacularAPIView(SpectacularAPIView):
-        exclude_from_schema = True
-
+    from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerSplitView
 
     urlpatterns += [
-        path('api/schema/', HiddenSpectacularAPIView.as_view(), name='schema'),
-        path('docs/', SpectacularSwaggerSplitView.as_view(url_name='schema'), name='swagger-ui'),
+        path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+        path('docs/', SpectacularSwaggerSplitView.as_view(url_name="schema"), name='swagger-ui'),
     ]
