@@ -22,6 +22,6 @@ def test_coupon_policy_model():
     )
     coupon_policy.save()
 
-    assert coupon_policy.name == "test"
+    assert coupon_policy.name == "[테스트]쿠폰 정책 생성"
     assert coupon_policy.discount_value == 1000
     assert coupon_policy.minimum_order_amount == 10000
