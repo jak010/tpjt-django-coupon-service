@@ -2,7 +2,7 @@
 version: "3"
 
 services:
-  poomasi_dev_db:
+  dev_db:
     image: mysql:8.0.40-debian
     platform: linux/amd64
     ports:
@@ -15,6 +15,5 @@ services:
     volumes:
       - "./sqls/:/docker-entrypoint-initdb.d/"
     command:
-      - --default-authentication-plugin=mysql_native_password
       - --character-set-server=utf8
       - --collation-server=utf8_unicode_ci
