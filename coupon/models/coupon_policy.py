@@ -67,6 +67,7 @@ class CouponPolicy(TimeField):
 
     @classmethod
     def with_command(cls, command: CouponPolicyCreateRequest):
+        # Hack, 25.06.01 : Serializer에서 Validate가 끝난 데이터에 접근하기 위해 사용해야되는 문법이 강제되기 떄문에 편의성이 떨어진다.
         return cls.init_entity(
             name=command.validated_data['name'],
             discount_type=command.validated_data['discount_type'],
