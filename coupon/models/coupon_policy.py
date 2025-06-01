@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import enum
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import TYPE_CHECKING
 
 from django.db import models
@@ -67,3 +67,18 @@ class CouponPolicy(TimeField):
             start_time=start_time,
             end_time=end_time
         )
+
+    def get_start_time(self):
+        return self.start_time.replace(tzinfo=timezone.utc)
+
+    def get_end_time(self):
+        return self.end_time.replace(tzinfo=timezone.utc)
+
+    def is_issueable_time_coupon(self):
+        """ 쿠폰이 발급 가능한 시간인지 체크하기 """
+
+        _current = datetime.now().replace(tzinfo=timezone.utc)
+
+        if self.start_time.replace(tzinfo=timezone.utc) < _current < self.end_time.replace(tzinfo=timezone.utc):
+            return True
+        return False

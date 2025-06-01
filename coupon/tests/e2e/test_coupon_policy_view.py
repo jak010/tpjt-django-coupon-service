@@ -3,6 +3,8 @@ import json
 import pytest
 from rest_framework.test import APIRequestFactory, APIClient
 
+from datetime import datetime, timedelta
+
 
 @pytest.mark.django_db
 class TestCreateCouponPolicyView:
@@ -24,8 +26,8 @@ class TestCreateCouponPolicyView:
             "minimum_order_amount": 30000,
             "maximum_order_amount": 150000,
             "total_quantity": 1000,
-            "start_time": "2025-07-01",
-            "end_time": "2025-07-31"
+            "start_time": datetime.now().isoformat(),
+            "end_time": (datetime.now() + timedelta(days=30)).isoformat()
         }
 
         # Act
@@ -59,7 +61,6 @@ class TestCreateCouponPolicyView:
             content_type="application/json",
             data=json.dumps(request_data)
         )
-
 
         # Assert
         assert response.status_code == 200
