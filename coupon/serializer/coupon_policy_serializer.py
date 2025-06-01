@@ -6,15 +6,23 @@ from coupon.models.coupon_policy import CouponPolicy
 class CouponPolicyListSchema:
     class CouponPolicyListRequest(serializers.Serializer):
         page = serializers.IntegerField(default=1)
-        per_page = serializers.IntegerField(default=10)
+        per_page = serializers.IntegerField(
+            min_value=1,
+            max_value=10,
+            default=10,
+            required=False
+            )
 
-    class CouponPolicyListReponse(serializers.Serializer):
-        class _ListResponseData(serializers.ModelSerializer):
+    class CouponPolicyPaginateListReponse(serializers.Serializer):
+        class _CouponPolicyPaginateModel(serializers.ModelSerializer):
             class Meta:
                 model = CouponPolicy
                 fields = "__all__"
 
-        data = _ListResponseData(many=True)
+        page = serializers.IntegerField()
+        per_page = serializers.IntegerField()
+        total_page = serializers.IntegerField()
+        items = _CouponPolicyPaginateModel(many=True)
 
 
 class CouponPolicyCreateSchema:
