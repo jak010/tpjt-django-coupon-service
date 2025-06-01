@@ -9,7 +9,7 @@ from coupon.services.coupon_service import CouponService
 # HACK, 25.06.01 : Service Class는 DI로 해결하는게 ?
 
 
-class CouponView(APIView):
+class CouponIssueView(APIView):
 
     @extend_schema(
         request=CouponCreateSchema.CouponCreateRequest,
@@ -32,3 +32,36 @@ class CouponView(APIView):
                 }
             )
         )
+
+
+class CouponUseView(APIView):
+
+    @extend_schema(
+        responses=[CouponSerializer],
+        summary="쿠폰 사용하기",
+        tags=["쿠폰"]
+    )
+    def post(self, request):
+        raise NotImplementedError
+
+
+class CouponCancelView(APIView):
+
+    @extend_schema(
+        responses=[CouponSerializer],
+        summary="쿠폰 조회",
+        tags=["쿠폰"]
+    )
+    def post(self, request):
+        raise NotImplementedError
+
+
+class CouponDetailView(APIView):
+
+    @extend_schema(
+        responses=[CouponSerializer],
+        summary="쿠폰 조회",
+        tags=["쿠폰"]
+    )
+    def get(self, request):
+        raise NotImplementedError
