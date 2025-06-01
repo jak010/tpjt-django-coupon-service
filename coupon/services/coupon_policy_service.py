@@ -14,11 +14,12 @@ class CouponPolicyService:
 
     @transaction.atomic
     def create_coupon_policy(self,
-                             coupon_policy_command: CouponPolicyCreateSchema.CouponPolicyCreateRequest
+                             request: CouponPolicyCreateSchema.CouponPolicyCreateRequest
                              ):
-        new_coupon_policy = CouponPolicy.with_command(
-            command=coupon_policy_command
-        )
+        """ 쿠폰 정책 생성하기 """
+
+        new_coupon_policy = CouponPolicy.init_entity(**request.validated_data)
+
         new_coupon_policy.save()
 
         return new_coupon_policy

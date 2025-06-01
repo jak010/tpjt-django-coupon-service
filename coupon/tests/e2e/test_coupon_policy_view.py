@@ -43,8 +43,8 @@ class TestCreateCouponPolicyView:
         """ 쿠폰 정책, 정률 할인 생성 테스트 """
         # Arrange
         request_data = {
-            "name": "여름 프로모션 10% 할인",
-            "discount_type": "PERCENTAGE",
+            "name": "[정률]여름 프로모션 10% 할인",
+            "discount_type": "PERCENT_AMOUNT",
             "discount_value": 10,
             "minimum_order_amount": 30000,
             "maximum_order_amount": 150000,
@@ -54,11 +54,12 @@ class TestCreateCouponPolicyView:
         }
 
         # Act
-        request = self.client.post(
+        response = self.client.post(
             self.request_url,
             content_type="application/json",
             data=json.dumps(request_data)
         )
 
+
         # Assert
-        assert request.status_code == 200
+        assert response.status_code == 200

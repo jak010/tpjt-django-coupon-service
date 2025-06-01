@@ -17,7 +17,7 @@ class CouponPolicyView(APIView):
         request_serializer = CouponPolicyCreateSchema.CouponPolicyCreateRequest(data=request.data)
         request_serializer.is_valid(raise_exception=True)
         new_coupon_policy = CouponPolicyService().create_coupon_policy(
-            coupon_policy_command=request_serializer
+            request=request_serializer
         )
 
         return NormalResponse.success(
@@ -37,7 +37,7 @@ class CouponPolicyView(APIView):
         request_serializer = CouponPolicyCreateSchema.CouponPolicyCreateRequest(data=request.data)
         request_serializer.is_valid(raise_exception=True)
         new_coupon_policy = CouponPolicyService().create_coupon_policy(
-            coupon_policy_command=request_serializer
+            request=request_serializer
         )
 
         return NormalResponse.success(
