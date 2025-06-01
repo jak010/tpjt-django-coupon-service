@@ -13,12 +13,14 @@ from coupon.services.coupon_policy_service import CouponPolicyService
 
 # HACK, 25.06.01 : Service Class는 DI로 해결하는게 ?
 
+
 class CouponPolicyView(APIView):
 
     @extend_schema(
         responses=CouponPolicyCreateSchema.CouponPolicyCreateResponse,
         request=CouponPolicyCreateSchema.CouponPolicyCreateRequest,
-        summary="쿠폰 정책 생성하기"
+        summary="쿠폰 정책 생성하기",
+        tags=["쿠폰 정책"]
     )
     def post(self, request):
         request_serializer = CouponPolicyCreateSchema.CouponPolicyCreateRequest(data=request.data)
@@ -39,7 +41,8 @@ class CouponPolicyView(APIView):
     @extend_schema(
         parameters=[CouponPolicyListSchema.CouponPolicyListRequest],
         responses=CouponPolicyListSchema.CouponPolicyPaginateListReponse,
-        summary="쿠폰 정책 목록조회"
+        summary="쿠폰 정책 목록조회",
+        tags=["쿠폰 정책"]
     )
     def get(self, request):
         request_serializer = CouponPolicyListSchema.CouponPolicyListRequest(data=request.query_params)
@@ -57,7 +60,8 @@ class CouponPolicyView(APIView):
 class CouponPolicyDetailView(APIView):
     @extend_schema(
         responses=CouponPolicyModel,
-        summary="쿠폰 정책 목록조회"
+        summary="쿠폰 정책 목록조회",
+        tags=["쿠폰 정책"]
     )
     def get(self, *args, **kwargs):
         coupon_policy = CouponPolicyService().get_coupon_policy(
