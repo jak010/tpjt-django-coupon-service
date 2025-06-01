@@ -39,9 +39,9 @@ class CouponPolicyService:
         return new_coupon_policy
 
     @transaction.atomic
-    def get_coupon_policy(self,
-                          request: CouponPolicyListSchema.CouponPolicyListRequest
-                          ) -> PaginateResult:
+    def get_all_coupon_policy(self,
+                              request: CouponPolicyListSchema.CouponPolicyListRequest
+                              ) -> PaginateResult:
         """ 쿠폰 정책 목록조회 """
 
         paginator = Paginator(CouponPolicy.objects.all(), request.validated_data["per_page"])
@@ -61,3 +61,12 @@ class CouponPolicyService:
                 coupon_policy.to_dict() for coupon_policy in coupon_policies.object_list
             ]  # HACK, 25-06-01 : Lazy Load 때문에 List 안 걸어주면 View 레벨에서 Transaction이 한번 더 걸림
         )
+
+    @transaction.atomic()
+    def get_coupon_policy(self, coupon_policy_id: int):
+        coupon_policy = CouponPolicy.objects.filter(coupon_policy_id=coupon_policy_id)
+
+        if coupon_policy is None:
+            raise Exception("Coupon Policy Not Found")
+
+        return coupon_policy.first()

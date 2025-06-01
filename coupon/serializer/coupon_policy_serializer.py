@@ -3,7 +3,23 @@ from rest_framework import serializers
 from coupon.models.coupon_policy import CouponPolicy
 
 
+class CouponPolicyModel(serializers.ModelSerializer):
+    class Meta:
+        model = CouponPolicy
+        fields = "__all__"
+
+
 class CouponPolicyListSchema:
+    """ 쿠폰 정책 목록(페이지네이션) 조회
+
+    :Request
+        param page <int> : 조회할 page
+        param per_page <int> : page 당의 데이터 수
+
+    : Response
+
+    """
+
     class CouponPolicyListRequest(serializers.Serializer):
         page = serializers.IntegerField(default=1)
         per_page = serializers.IntegerField(
@@ -11,18 +27,13 @@ class CouponPolicyListSchema:
             max_value=10,
             default=10,
             required=False
-            )
+        )
 
     class CouponPolicyPaginateListReponse(serializers.Serializer):
-        class _CouponPolicyPaginateModel(serializers.ModelSerializer):
-            class Meta:
-                model = CouponPolicy
-                fields = "__all__"
-
         page = serializers.IntegerField()
         per_page = serializers.IntegerField()
         total_page = serializers.IntegerField()
-        items = _CouponPolicyPaginateModel(many=True)
+        items = CouponPolicyModel(many=True)
 
 
 class CouponPolicyCreateSchema:

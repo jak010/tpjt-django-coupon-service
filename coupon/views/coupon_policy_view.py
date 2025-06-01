@@ -1,12 +1,13 @@
-import json
-from xml.dom.expatbuilder import parseFragment
-
-from django.db import transaction
 from drf_spectacular.utils import extend_schema
 from rest_framework.views import APIView
+from rest_framework.exceptions import NotFound
 
 from contrib.response import NormalResponse
-from coupon.serializer.coupon_policy_serializer import CouponPolicyCreateSchema, CouponPolicyListSchema, CouponPolicyModel
+from coupon.serializer.coupon_policy_serializer import (
+    CouponPolicyCreateSchema,
+    CouponPolicyListSchema,
+    CouponPolicyModel
+)
 from coupon.services.coupon_policy_service import CouponPolicyService
 
 
@@ -44,10 +45,30 @@ class CouponPolicyView(APIView):
         request_serializer = CouponPolicyListSchema.CouponPolicyListRequest(data=request.query_params)
         request_serializer.is_valid(raise_exception=True)
 
-        coupon_polices = CouponPolicyService().get_coupon_policy(request=request_serializer)
+        coupon_polices = CouponPolicyService().get_all_coupon_policy(request=request_serializer)
 
         return NormalResponse.page(
             CouponPolicyListSchema.CouponPolicyPaginateListReponse(
                 data=coupon_polices.to_dict()
+            )
+        )
+
+
+class CouponPolicyDetailView(APIView):
+    @extend_schema(
+        responses=CouponPolicyModel,
+        summary="쿠폰 정책 목록조회"
+    )
+    def get(self, *args, **kwargs):
+        coupon_policy = CouponPolicyService().get_coupon_policy(
+            coupon_policy_id=kwargs.get("coupon_policy_id")
+        )
+
+        if coupon_policy is None:
+            raise NotFound()  # Hack, 25.06.01 : 데이터 형식 맞추기
+
+        return NormalResponse.page(
+            CouponPolicyModel(
+                data=coupon_policy.to_dict()
             )
         )
