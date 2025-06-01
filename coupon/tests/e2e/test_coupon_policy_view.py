@@ -1,3 +1,5 @@
+import json
+
 from rest_framework.test import APIRequestFactory, APIClient
 
 from coupon.views.coupon_policy_view import CouponPolicyView
@@ -18,16 +20,18 @@ class TestCreateCouponPolicyView:
         response = self.client.post(
             '/api/v1/coupon/policy',
             content_type="application/json",
-            body={
-                "name": "여름 프로모션 10% 할인",
-                "discount_type": "FIXED_AMOUNT",
-                "discount_value": 10,
-                "minimum_order_amount": 30000,
-                "maximum_order_amount": 150000,
-                "total_quantity": 1000,
-                "start_time": "2025-07-01",
-                "end_time": "2025-07-31"
-            }
+            data=json.dumps(
+                {
+                    "name": "여름 프로모션 10% 할인",
+                    "discount_type": "FIXED_AMOUNT",
+                    "discount_value": 10,
+                    "minimum_order_amount": 30000,
+                    "maximum_order_amount": 150000,
+                    "total_quantity": 1000,
+                    "start_time": "2025-07-01",
+                    "end_time": "2025-07-31"
+                }
+            )
         )
         # Arrange
 
@@ -41,16 +45,18 @@ class TestCreateCouponPolicyView:
         request = self.client.post(
             '/api/v1/coupon-policy',
             content_type="application/json",
-            data={
-                "name": "여름 프로모션 10% 할인",
-                "discount_type": "PERCENTAGE",
-                "discount_value": 10,
-                "minimum_order_amount": 30000,
-                "maximum_order_amount": 150000,
-                "total_quantity": 1000,
-                "start_time": "2025-07-01T00:00:00Z",
-                "end_time": "2025-07-31T23:59:59Z"
-            }
+            data=json.dumps(
+                {
+                    "name": "여름 프로모션 10% 할인",
+                    "discount_type": "PERCENTAGE",
+                    "discount_value": 10,
+                    "minimum_order_amount": 30000,
+                    "maximum_order_amount": 150000,
+                    "total_quantity": 1000,
+                    "start_time": "2025-07-01T00:00:00Z",
+                    "end_time": "2025-07-31T23:59:59Z"
+                }
+            )
         )
         # Arrange
 
