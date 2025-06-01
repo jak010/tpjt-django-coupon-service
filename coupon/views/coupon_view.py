@@ -13,6 +13,7 @@ class CouponView(APIView):
 
     @extend_schema(
         request=CouponCreateSchema.CouponCreateRequest,
+        responses=[CouponCreateSchema.CouponCreateResponse],
         summary="쿠폰 생성하기",
         tags=["쿠폰"]
     )
@@ -20,10 +21,14 @@ class CouponView(APIView):
         request_serializer = CouponCreateSchema.CouponCreateRequest(data=request.data)
         request_serializer.is_valid(raise_exception=True)
 
-        new_coupon_policy = CouponService().issue_coupon(
+        new_coupon = CouponService().issue_coupon(
             request=request_serializer
         )
 
         return NormalResponse.success(
-            CouponSerializer(new_coupon_policy)
+            CouponCreateSchema.CouponCreateResponse(
+                {
+                    "data": new_coupon.to_dict()
+                }
+            )
         )
