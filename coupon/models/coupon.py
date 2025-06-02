@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import datetime
 import enum
 import uuid
 
@@ -54,3 +55,18 @@ class Coupon(TimeField):
     @classmethod
     def generate_coupon_code(cls):
         return str(uuid.uuid4().hex)[0:6]
+
+    def use_coupon(self):
+        """ 쿠폰 사용처리하기 """
+        self.status = self.Status.USED.value
+        self.used_at = datetime.datetime.now()
+        self.updated_at = datetime.datetime.now()
+        self.save()
+        return self
+
+    def cancel_coupon(self):
+        """ 쿠폰 취소처리하기 """
+        self.status = self.Status.CANCELLED.value
+        self.updated_at = datetime.datetime.now()
+        self.save()
+        return self

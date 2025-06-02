@@ -12,8 +12,9 @@ from coupon.services.coupon_service import CouponService
 class CouponIssueView(APIView):
 
     @extend_schema(
+        operation_id="쿠폰 생성하기",
         request=CouponCreateSchema.CouponCreateRequest,
-        responses=[CouponCreateSchema.CouponCreateResponse],
+        responses=CouponCreateSchema.CouponCreateResponse,
         summary="쿠폰 생성하기",
         tags=["쿠폰"]
     )
@@ -37,31 +38,55 @@ class CouponIssueView(APIView):
 class CouponUseView(APIView):
 
     @extend_schema(
-        responses=[CouponSerializer],
+        operation_id="쿠폰 사용하기",
+        responses=CouponSerializer,
+        request=None,
         summary="쿠폰 사용하기",
         tags=["쿠폰"]
     )
-    def post(self, request):
-        raise NotImplementedError
+    def post(self, request, *args, **kwargs):
+        coupon_id = kwargs.get("coupon_id")
+
+        used_coupon = CouponService().use_coupon(
+            coupon_id=coupon_id
+        )
+
+        return NormalResponse.success(
+            CouponSerializer(used_coupon)
+        )
 
 
 class CouponCancelView(APIView):
 
     @extend_schema(
-        responses=[CouponSerializer],
-        summary="쿠폰 조회",
+        responses=CouponSerializer,
+        request=None,
+        summary="쿠폰 취소",
         tags=["쿠폰"]
     )
-    def post(self, request):
-        raise NotImplementedError
+    def delete(self, request, *args, **kwargs):
+        coupon_id = kwargs.get("coupon_id")
+
+        cancel_coupon = CouponService().cancel_coupon(coupon_id=coupon_id)
+
+        return NormalResponse.success(
+            CouponSerializer(cancel_coupon)
+        )
 
 
 class CouponDetailView(APIView):
 
     @extend_schema(
-        responses=[CouponSerializer],
+        operation_id="쿠폰 조회",
+        responses=CouponSerializer,
         summary="쿠폰 조회",
         tags=["쿠폰"]
     )
-    def get(self, request):
-        raise NotImplementedError
+    def get(self, *args, **kwargs):
+        coupon_id = kwargs.get("coupon_id")
+
+        coupon = CouponService().get_coupon(coupon_id=coupon_id)
+
+        return NormalResponse.success(
+            CouponSerializer(coupon)
+        )

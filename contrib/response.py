@@ -29,3 +29,17 @@ class NormalResponse(Response):
                 "data": response_serializer.validated_data["items"]
             }
         )
+
+
+class NoContentResponse(Response):
+    status_code = 201
+    content_type = "application/json"
+
+    @classmethod
+    def success(cls):
+        return cls(
+            status=cls.status_code,
+            data={
+                "message": "success"
+            }
+        )

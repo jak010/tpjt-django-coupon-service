@@ -17,6 +17,7 @@ from coupon.services.coupon_policy_service import CouponPolicyService
 class CouponPolicyView(APIView):
 
     @extend_schema(
+        operation_id="쿠폰 정책 생성하기",
         responses=CouponPolicyCreateSchema.CouponPolicyCreateResponse,
         request=CouponPolicyCreateSchema.CouponPolicyCreateRequest,
         summary="쿠폰 정책 생성하기",
@@ -29,6 +30,7 @@ class CouponPolicyView(APIView):
         new_coupon_policy = CouponPolicyService().create_coupon_policy(
             request=request_serializer
         )
+
 
         return NormalResponse.success(
             CouponPolicyCreateSchema.CouponPolicyCreateResponse(
@@ -59,6 +61,7 @@ class CouponPolicyView(APIView):
 
 class CouponPolicyDetailView(APIView):
     @extend_schema(
+        operation_id="쿠폰 정책 목록조회",
         responses=CouponPolicyModel,
         summary="쿠폰 정책 목록조회",
         tags=["쿠폰 정책"]
