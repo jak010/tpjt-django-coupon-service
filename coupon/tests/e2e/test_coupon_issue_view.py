@@ -5,6 +5,8 @@ from rest_framework.test import APIRequestFactory, APIClient
 
 from datetime import datetime, timedelta
 
+from coupon.models.coupon_policy import CouponPolicy
+
 
 @pytest.mark.django_db
 class TestCreateCouponView:
@@ -29,23 +31,56 @@ class TestCreateCouponView:
         self.factory = APIRequestFactory()
         self.client = APIClient()
 
-        self.request_url = '/api/v1/coupon'
+        self.request_url = '/api/v1/coupon/issue'
 
-    def test_create_fixed_amount_coupon_policy_view(self):
-        """ 쿠폰 정책, 정액 할인 생성 테스트 """
+    @pytest.mark.parametrize("discount_type", ["FIXED_AMOUNT", "PERCENT_AMOUNT"])
+    def test_create_coupon_issue(self, discount_type):
+        """ 쿠폰 생성 API 테스트.
+
+        이 테스트는 다음을 검증합니다:
+          주어진 조건의 정액 할인 쿠폰 정책을 생성한 뒤, 해당 쿠폰 정책 ID를 포함한 POST 요청을 보냈을 때,
+           API가 정상적으로 200 OK 응답을 반환하는지 확인합니다.
+        """
 
         # Arrange
-        request_data = {
-            "coupon_policy_id": 148
-        }
+        new_coupon_policy = CouponPolicy.init_entity(
+            start_time=datetime.now() - timedelta(days=1),
+            end_time=datetime.now() + timedelta(days=1),
+            discount_type=discount_type,
+            discount_value=10,
+            minimum_order_amount=30000,
+            maximum_order_amount=150000,
+            total_quantity=1,
+            name="여름 프로모션 10% 할인"
+        )
+        new_coupon_policy.save()
 
         # Act
         response = self.client.post(
             self.request_url,
             content_type="application/json",
-            data=json.dumps(request_data)
+            data=json.dumps({
+                "coupon_policy_id": new_coupon_policy.pk
+            })
         )
+
+        # Assert
+        assert response.status_code == 200
+
+    def test_create_failure_when_coupon_policy_not_found(self):
+        """ 쿠폰 생성 API 테스트."""
         # Arrange
+
+        # 존재하지 않는 coupon_policy_id를 사용
+        request_data = json.dumps({
+            "coupon_policy_id": 1231231231
+        })
+
+        # Act
+        response = self.client.post(
+            self.request_url,
+            data=request_data
+        )
 
         # Assert
         assert response.status_code == 200
