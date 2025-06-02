@@ -15,6 +15,18 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",  # ✅ 이 설정이 되어 있어야 함
+        "LOCATION": "redis://127.0.0.1:16379/1",       # 또는 unix socket 등
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        }
+
+    }
+}
+
+
 # LOGGING = {
 #     'version': 1,
 #     'disable_existing_loggers': False,

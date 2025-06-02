@@ -5,7 +5,7 @@ from contrib.response import NormalResponse
 from coupon.exceptions.coupon import NotEnoughCoupon
 from coupon.serializer.coupon_serializer import CouponCreateSchema, CouponSerializer
 from coupon.services.coupon_service import CouponService
-from coupon.services.coupon_service_v2 import CouponServiceV2
+from coupon.services.v2.coupon_service_v2 import CouponServiceV2
 
 
 # HACK, 25.06.01 : Service Class는 DI로 해결하는게 ?

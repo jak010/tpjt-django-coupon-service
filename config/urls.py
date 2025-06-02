@@ -21,6 +21,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/coupon', include("coupon.urls")),
+    path('api/v2/coupon', include("coupon.urls2")),
 ]
 
 if settings.DEBUG:

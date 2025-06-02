@@ -1,28 +1,15 @@
 from __future__ import annotations
 
-import json
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
-from django.db import transaction
 from django.core.paginator import Paginator, EmptyPage
+from django.db import transaction
 
 from coupon.models.coupon_policy import CouponPolicy
+from contrib.result import PaginateResult
 
 if TYPE_CHECKING:
     from coupon.serializer.coupon_policy_serializer import CouponPolicyCreateSchema, CouponPolicyListSchema
-
-from dataclasses import dataclass, asdict
-
-
-@dataclass
-class PaginateResult:
-    page: int
-    per_page: int
-    total_page: int
-    items: List
-
-    def to_dict(self):
-        return asdict(self)
 
 
 class CouponPolicyService:
