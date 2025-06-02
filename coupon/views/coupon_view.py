@@ -12,7 +12,7 @@ from coupon.services.coupon_service_v2 import CouponServiceV2
 
 
 class CouponIssueView(APIView):
-    coupon_service = CouponService()
+    coupon_service = CouponServiceV2()
 
     @extend_schema(
         operation_id="쿠폰 생성하기",
