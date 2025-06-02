@@ -10,7 +10,7 @@ from coupon.models.coupon import Coupon, CouponPolicy
 from coupon.serializer.coupon_serializer import CouponCreateSchema
 
 
-class CouponService:
+class CouponServiceV2:
 
     @transaction.atomic
     def issue_coupon(self,
@@ -24,13 +24,15 @@ class CouponService:
 
         Note:
             쿠폰 발급 로직의 문제
-                1. lock이 잡혀있지 않기 떄문에 설정된 쿠폰 발급 수량보다 더 많은 쿠폰이 생성될 있음
+                1. Race Condition 이 잡혀있지 않기 떄문에 설정된 쿠폰 발급 수량보다 더 많은 쿠폰이 생성될 있음
                 2. 성능이슈, 매 요청마다 쿠폰 수를 카운트 하는 쿼리 실행
-                  - 쿠폰 수가 많아질 수록 카운트 쿼리의 성능이 저하될 수 있음
+                  - 쿠폰 수가 많아질 수록 카운트 쿼리의 성능이 저하될 수 있음, PESSMISTIC LOCK 으로 인한 병복
+                3. Dead Lock
+                    - 여러 트랜잭션이 동시에 같은 쿠폰 정책에 대해. 락을 획득하려 . 때 트랜잭션 타임아웃이 발생할 수 있음
 
         """
         # HACK, 25.06.01 : Django ORM을 사용하니 Typing을 이처럼 지정해줘야함
-        coupon_policy: Optional[CouponPolicy] = CouponPolicy.objects.filter(
+        coupon_policy: Optional[CouponPolicy] = CouponPolicy.objects.select_for_update().filter(
             coupon_policy_id=request.validated_data["coupon_policy_id"]
         ).first()
 

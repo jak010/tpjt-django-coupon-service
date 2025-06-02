@@ -9,40 +9,34 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': '1234',
         'HOST': '127.0.0.1',  # Or an IP Address that your DB is hosted on
-        'PORT': '13306'
-    },
-    "test": {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'coupon_event',
-        'USER': 'root',
-        'PASSWORD': '1234',
-        'HOST': '127.0.0.1',  # Or an IP Address that your DB is hosted on
-        'PORT': '13306'
+        'PORT': '13306',
+        # Pool settings
+        'CONN_MAX_AGE': 600,  # Django가 자동 유지하지 않도록
     }
 }
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'sql': {
-            '()': 'django_sqlformatter.SqlFormatter',
-        },
-    },
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'sql'
-        },
-    },
-    'loggers': {
-        'django.db.backends': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-        }
-    }
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'sql': {
+#             '()': 'django_sqlformatter.SqlFormatter',
+#         },
+#     },
+#     'handlers': {
+#         'console': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'sql'
+#         },
+#     },
+#     'loggers': {
+#         'django.db.backends': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#         }
+#     }
+# }
 
 SPECTACULAR_SETTINGS = {
     'TITLE': '',  # OpenAPI 3.0 페이지 타이틀,

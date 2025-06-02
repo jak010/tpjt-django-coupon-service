@@ -12,3 +12,8 @@ app.migrations:
 app.migrate:
 	python manage.py migrate --settings=$(DJANGO_SETTINGS_MODUEL)
 
+app.deploy:
+	gunicorn config.wsgi:application --workers 8 --log-level debug --error-logfile gunicorn-error.log
+
+load.test.v0:
+	 locust -f ./tests/locust-coupon-issue-v0.py --host=http://localhost:8000

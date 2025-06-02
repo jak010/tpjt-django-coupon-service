@@ -17,6 +17,15 @@ class NormalResponse(Response):
         )
 
     @classmethod
+    def failure(cls, desc):
+        return cls(
+            status=200,
+            data={
+                "message" : desc
+            }
+        )
+
+    @classmethod
     def page(cls, response_serializer: Serializer):
         response_serializer.is_valid(raise_exception=True)
 
