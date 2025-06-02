@@ -67,6 +67,14 @@ class TestCreateCouponView:
         # Assert
         assert response.status_code == 200
 
+    def test_coupon_create_failure_when_invalid_times(self):
+        """ 쿠폰 생성 API 테스트 - 발급 가능한 시간이 아님 """
+        ...
+
+    def test_coupon_create_failure_when_out_of_quantity(self):
+        """ 쿠폰 생성 API 테스트 - 발급 가능한 수량 초과 """
+        ...
+
     def test_create_failure_when_coupon_policy_not_found(self):
         """ 쿠폰 생성 API 테스트."""
         # Arrange
