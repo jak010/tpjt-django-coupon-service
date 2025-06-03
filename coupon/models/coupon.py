@@ -56,9 +56,10 @@ class Coupon(TimeField):
     def generate_coupon_code(cls):
         return str(uuid.uuid4().hex)[0:6]
 
-    def use_coupon(self):
+    def use_coupon(self, order_id: str = None):
         """ 쿠폰 사용처리하기 """
         self.status = self.Status.USED.value
+        self.order_id = order_id if order_id is not None else self.order_id
         self.used_at = datetime.datetime.now()
         self.updated_at = datetime.datetime.now()
         self.save()

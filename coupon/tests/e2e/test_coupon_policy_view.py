@@ -51,8 +51,8 @@ class TestCreateCouponPolicyView:
             "minimum_order_amount": 30000,
             "maximum_order_amount": 150000,
             "total_quantity": 1000,
-            "start_time": "2025-07-01T00:00:00Z",
-            "end_time": "2025-07-31T23:59:59Z"
+            "start_time": "2025-06-01T00:00:00Z",
+            "end_time": "2025-06-30T23:59:59Z"
         }
 
         # Act
