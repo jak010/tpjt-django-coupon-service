@@ -29,6 +29,9 @@ class CouponPolicyListSchema:
             required=False
         )
 
+    class CouponPolicyListResponse(serializers.Serializer):
+        items = CouponPolicyModel(many=True)
+
     class CouponPolicyPaginateListReponse(serializers.Serializer):
         page = serializers.IntegerField()
         per_page = serializers.IntegerField()

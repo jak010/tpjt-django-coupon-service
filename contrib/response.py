@@ -21,7 +21,7 @@ class NormalResponse(Response):
         return cls(
             status=200,
             data={
-                "message" : desc
+                "message": desc
             }
         )
 

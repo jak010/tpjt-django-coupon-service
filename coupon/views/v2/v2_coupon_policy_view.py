@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 
 from contrib.response import NormalResponse
 from coupon.serializer.coupon_policy_serializer import (
-    CouponPolicyCreateSchema
+    CouponPolicyCreateSchema, CouponPolicyModel, CouponPolicyListSchema
 )
 from coupon.services.v2.coupon_policy_service_v2 import CouponPolicyServiceV2
 
@@ -12,6 +12,24 @@ from coupon.services.v2.coupon_policy_service_v2 import CouponPolicyServiceV2
 
 
 class V2CouponPolicyView(APIView):
+
+    @extend_schema(
+        operation_id="v2, 쿠폰 정책",
+        responses=CouponPolicyListSchema.CouponPolicyListResponse,
+        request=None,
+        summary="v2,쿠폰 정책 목록조회",
+        tags=["v2, 쿠폰 정책"]
+    )
+    def get(self, request):
+        all_coupon_policy = CouponPolicyServiceV2().get_all_coupon_policy()
+
+        return NormalResponse.success(
+            CouponPolicyListSchema.CouponPolicyListResponse(
+                {
+                    "items": all_coupon_policy
+                }
+            )
+        )
 
     @extend_schema(
         operation_id="v2, 쿠폰 정책 생성하기",
@@ -28,11 +46,29 @@ class V2CouponPolicyView(APIView):
             request=request_serializer
         )
 
-
         return NormalResponse.success(
             CouponPolicyCreateSchema.CouponPolicyCreateResponse(
                 {
                     "data": new_coupon_policy.to_dict()
                 }
             )
+        )
+
+
+class V2CouponPolicyDetailView(APIView):
+
+    @extend_schema(
+        operation_id="v2, 쿠폰 정책 조회하기",
+        responses=CouponPolicyCreateSchema.CouponPolicyCreateResponse,
+        request=CouponPolicyCreateSchema.CouponPolicyCreateRequest,
+        summary="v2,쿠폰 정책 조회하기",
+        tags=["v2, 쿠폰 정책"]
+    )
+    def get(self, *args, **kwargs):
+        coupon_policy = CouponPolicyServiceV2().get_coupon_policy(
+            coupon_policy_id=kwargs.get("coupon_policy_id")
+        )
+
+        return NormalResponse.success(
+            CouponPolicyModel(coupon_policy)
         )
