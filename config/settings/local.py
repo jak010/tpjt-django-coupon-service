@@ -1,6 +1,28 @@
+from libs.examples.django_redis_ex02 import AcquiredLockFailed
 from .base import *
 
 DEBUG = True
+
+import logging
+
+# Redis 로깅 활성화
+logging.basicConfig(level=logging.DEBUG)
+# 또는 Django 설정에 로깅 추가
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'redis': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
+}
 
 DATABASES = {
     'default': {
@@ -15,17 +37,34 @@ DATABASES = {
     }
 }
 
+from redis.backoff import ExponentialBackoff
+from redis.retry import Retry
+
+retry = Retry(
+    ExponentialBackoff(), 10
+)
+
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",  # ✅ 이 설정이 되어 있어야 함
-        "LOCATION": "redis://127.0.0.1:16379/1",       # 또는 unix socket 등
+        "LOCATION": "redis://127.0.0.1:16379/1",  # 또는 unix socket 등
         "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient"
-        }
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "SERIALIZER": "django_redis.serializers.json.JSONSerializer",
+            # "REDIS_CLIENT_KWARGS": {
+            #     "retry": retry,
+            #     "retry_on_error": [
+            #         Exception
+            #     ],
+            # }
 
+            # "REDIS_CLIENT_KWARGS": {
+            #     "retry": retry,
+            #     "retry_on_timeout": 10
+            # }
+        }
     }
 }
-
 
 # LOGGING = {
 #     'version': 1,
@@ -60,5 +99,4 @@ SPECTACULAR_SETTINGS = {
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-
 }
