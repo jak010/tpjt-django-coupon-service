@@ -1,6 +1,3 @@
-from libs.examples.django_redis_ex02 import AcquiredLockFailed
-from .base import *
-
 DEBUG = True
 
 import logging
