@@ -1,3 +1,5 @@
+from .base import *  # noqa
+
 DEBUG = True
 
 import logging
@@ -30,7 +32,10 @@ DATABASES = {
         'HOST': '127.0.0.1',  # Or an IP Address that your DB is hosted on
         'PORT': '13306',
         # Pool settings
-        'CONN_MAX_AGE': 600,  # Django가 자동 유지하지 않도록
+        'CONN_MAX_AGE': 600,  # Django가 자동 유지하지 않도록,
+        # 'OPTIONS': {
+        #     'isolation_level': "READ COMMITTED",
+        # },
     }
 }
 
