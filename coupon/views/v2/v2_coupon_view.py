@@ -5,11 +5,12 @@ from contrib.response import NormalResponse
 from coupon.exceptions.coupon import NotEnoughCoupon
 from coupon.serializer.coupon_serializer import CouponCreateSchema
 from coupon.services.v2.coupon_service_v2 import CouponServiceV2
+from coupon.services.v1.coupon_service import CouponRDBService
 
 
 class V2CouponIssueView(APIView):
     coupon_service = CouponServiceV2()
-
+    
     @extend_schema(
         operation_id="쿠폰 생성하기",
         request=CouponCreateSchema.CouponCreateRequest,

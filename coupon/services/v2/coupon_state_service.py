@@ -1,5 +1,6 @@
 import json
 
+from django.core.serializers.json import DjangoJSONEncoder
 from django_redis import get_redis_connection
 from coupon.models.coupon import Coupon
 
@@ -18,8 +19,11 @@ class CouponStateService:
 
         try:
             bucket = self.redis_client.get(state_key)
-            bucket.set(json.dumps(coupon.to_dict()))
+
+            if bucket is None:
+                self.redis_client.set(state_key, json.dumps(coupon.to_dict(), cls=DjangoJSONEncoder))
         except Exception as e:
+            print(e)
             raise Exception("쿠폰 상태 업데이트 중 에러가 발생했습니다.")
 
     def get_coupon_state(self, coupon_id: int):

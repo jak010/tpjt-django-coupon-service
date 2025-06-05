@@ -34,7 +34,7 @@ class CouponServiceV2:
         if coupon is None:
             raise Exception("Coupon Not Found")
 
-        self.coupon_state_service.update_coupon_state(coupon.to_dict())
+        self.coupon_state_service.update_coupon_state(coupon)
         return coupon
 
     @transaction.atomic

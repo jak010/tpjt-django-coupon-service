@@ -61,6 +61,7 @@ class CouponRedisService:
                 return new_coupon
 
         except Exception as e:
+            print(e)
             raise Exception("쿠폰 발급 도중 오류가 발생했습니다.")
         finally:
             redis_lock.release()

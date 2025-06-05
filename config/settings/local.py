@@ -4,24 +4,6 @@ DEBUG = True
 
 import logging
 
-# Redis 로깅 활성화
-logging.basicConfig(level=logging.DEBUG)
-# 또는 Django 설정에 로깅 추가
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'redis': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-        },
-    },
-}
 
 DATABASES = {
     'default': {
