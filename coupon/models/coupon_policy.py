@@ -22,15 +22,6 @@ class CouponPolicy(TimeField):
         FIXED_AMOUNT = "FIXED_AMOUNT"  # 정액 할인
         PERCENT_AMOUNT = "PERCENT_AMOUNT"  # 정률 할인
 
-        @classmethod
-        def of(cls, value):
-            if value == cls.FIXED_AMOUNT.value:
-                return cls.FIXED_AMOUNT.value
-            elif value == cls.PERCENT_AMOUNT.value:
-                return cls.PERCENT_AMOUNT.value
-
-            raise Exception(f"Invalid discount type: {value}")
-
     coupon_policy_id = models.AutoField(primary_key=True)
 
     name = models.CharField(max_length=36)
@@ -59,7 +50,7 @@ class CouponPolicy(TimeField):
                     ):
         return cls(
             name=name,
-            discount_type=cls.DiscountType.of(discount_type),
+            discount_type=cls.of_status(value=discount_type).value,
             discount_value=discount_value,
             minimum_order_amount=minimum_order_amount,
             maximum_order_amount=maximum_order_amount,
@@ -67,6 +58,16 @@ class CouponPolicy(TimeField):
             start_time=start_time,
             end_time=end_time
         )
+
+    @classmethod
+    def of_status(cls, value: str):
+        if value == cls.DiscountType.FIXED_AMOUNT.value:
+            return cls.DiscountType.FIXED_AMOUNT
+
+        elif value == cls.DiscountType.PERCENT_AMOUNT.value:
+            return cls.DiscountType.PERCENT_AMOUNT
+
+        raise Exception(f"Invalid discount type: {value}")
 
     def get_start_time(self):
         return self.start_time.replace(tzinfo=timezone.utc)

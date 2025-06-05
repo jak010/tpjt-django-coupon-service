@@ -25,12 +25,6 @@ class Coupon(TimeField):
         EXPIRED = "EXPIRED"
         CANCELLED = "CANCELLED"
 
-        @classmethod
-        def of(cls, value):
-            if value is not None:
-                return [k for k in cls if k.value == value][0]
-            raise Exception(f"Invalid status: {value}")
-
     coupon_id = models.AutoField(primary_key=True)
 
     coupon_code = models.CharField(max_length=6)
@@ -51,6 +45,12 @@ class Coupon(TimeField):
             order_id=generate_random_order_id(),
             used_at=None,
         )
+
+    @classmethod
+    def of_status(cls, value):
+        if value is not None:
+            return [k for k in cls.Status if k.value == value][0]
+        raise Exception(f"Invalid status: {value}")
 
     @classmethod
     def generate_coupon_code(cls):
