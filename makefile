@@ -13,7 +13,7 @@ app.migrate:
 	python manage.py migrate --settings=$(DJANGO_SETTINGS_MODUEL)
 
 app.deploy:
-	gunicorn config.wsgi:application --workers 8 --threads 8 --timeout 60 --keep-alive 5
+	gunicorn config.wsgi:application --workers 8 --timeout 60 --keep-alive 60
 
 load.test.v0:
 	 locust -f ./tests/locust-coupon-issue-v0.py --host=http://localhost:8000

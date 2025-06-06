@@ -1,9 +1,8 @@
 import json
 
+from django.core.cache import cache
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import transaction
-from django_redis import get_redis_connection
-from redis.client import Redis
 
 from coupon.models import CouponPolicy
 from coupon.serializer.coupon_policy_serializer import CouponPolicyCreateSchema
@@ -12,8 +11,6 @@ from coupon.serializer.coupon_policy_serializer import CouponPolicyCreateSchema
 class CouponPolicyServiceV2:
     COUPON_QUANTITY_KEY = "coupon:quantity"
     COUPON_POLICY_KEY = "coupon:policy"
-
-    redis_connection: Redis = get_redis_connection()
 
     @transaction.atomic
     def create_coupon_policy(self,
@@ -31,14 +28,14 @@ class CouponPolicyServiceV2:
 
         # Redis에 초기 수량 설정하기
         quantity_key = f"{self.COUPON_QUANTITY_KEY}:{new_coupon_policy.coupon_policy_id}"
-        atomic_quantity = self.redis_connection.get(quantity_key)
+        atomic_quantity = cache.get(quantity_key)
         if atomic_quantity is None:
-            self.redis_connection.set(quantity_key, new_coupon_policy.total_quantity)
+            cache.set(quantity_key, new_coupon_policy.total_quantity)
 
         # Redis에 정책 정보 저장하기
         policy_json = json.dumps(new_coupon_policy.to_dict(), cls=DjangoJSONEncoder)
         policy_key = f"{self.COUPON_POLICY_KEY}:{new_coupon_policy.coupon_policy_id}"
-        self.redis_connection.set(policy_key, policy_json)
+        cache.set(policy_key, policy_json)
 
         return new_coupon_policy
 

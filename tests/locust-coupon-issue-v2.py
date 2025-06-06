@@ -1,8 +1,8 @@
-
 from locust import HttpUser, task, between, FastHttpUser
 
 
 class CouponIssueUser(FastHttpUser):
+    connection_timeout = 10
     wait_time = between(0.1, 10)  # 사용자 요청 간 간격 (초)
 
     @task
@@ -17,7 +17,7 @@ class CouponIssueUser(FastHttpUser):
 
         """
         payload = {
-            "coupon_policy_id": 161
+            "coupon_policy_id": 163
         }
 
         self.client.post(

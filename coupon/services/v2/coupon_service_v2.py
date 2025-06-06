@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+import redis.exceptions
 from django.db import transaction
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, Throttled
 
 from coupon.models.coupon import Coupon
 from coupon.serializer.coupon_serializer import CouponCreateSchema
@@ -28,11 +29,10 @@ class CouponServiceV2:
             2. 쿠폰 정책의 발급 기간이 유효하지 않을떄는 쿠폰을 생성할 수 없음
             3. 쿠폰의 발급 수량 제한이 넘어갈떄는 쿠폰을 생성할 수 없음
         """
-        coupon = self.coupon_redis_service.issue_coupon(request)
-
-        coupon = Coupon.objects.filter(coupon_id=coupon.coupon_id).first()
-        if coupon is None:
-            raise Exception("Coupon Not Found")
+        try:
+            coupon = self.coupon_redis_service.issue_coupon(request)
+        except redis.exceptions.LockError:
+            raise Throttled()
 
         self.coupon_state_service.update_coupon_state(coupon)
         return coupon
