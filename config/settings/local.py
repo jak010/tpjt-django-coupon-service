@@ -35,17 +35,12 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "SERIALIZER": "django_redis.serializers.json.JSONSerializer",
-            # "REDIS_CLIENT_KWARGS": {
-            #     "retry": retry,
-            #     "retry_on_error": [
-            #         Exception
-            #     ],
-            # }
-
-            # "REDIS_CLIENT_KWARGS": {
-            #     "retry": retry,
-            #     "retry_on_timeout": 10
-            # }
+            "CONNECTION_POOL_KWARGS": {
+                "max_connections": 1000,
+                "retry_on_timeout": True,
+            },
+            "SOCKET_CONNECT_TIMEOUT": 5,  # seconds
+            "SOCKET_TIMEOUT": 5,
         }
     }
 }

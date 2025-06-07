@@ -17,7 +17,7 @@ class CouponIssueUser(FastHttpUser):
 
         """
         payload = {
-            "coupon_policy_id": 163
+            "coupon_policy_id": 165
         }
 
         self.client.post(
